@@ -11,7 +11,7 @@ function App() {
     fetch('http://localhost:3000/cards')
       .then(resp => resp.json())
       .then(data => {
-        data.forEach((idx, card) => card.display = true);
+        data.forEach((card, idx) => card.display = true);
         setCards(data);
       })
   }, [])
@@ -49,10 +49,10 @@ function App() {
   }
 
   return (
-    <div class="app">
+    <div className="app">
       <div>
         <h1 style={{ margin: 0, float: 'left', marginRight: '20px' }}>Patient triage app</h1>
-        <div class="form">
+        <div className="form">
           <input type="text" onChange={(evt) => searchCards(evt.target.value)} />
           <select onChange={(evt) => filterArrhythmias(evt.target.value)}>
             <option value="">--</option>
@@ -64,49 +64,49 @@ function App() {
           </select>
         </div>
       </div>
-      <div class="cols">
-        <div class="col">
+      <div className="cols">
+        <div className="col">
           <p id="pending-title" align="center">PENDING</p>
           <hr />
           {pendingCards.map((card, idx) => (
-            <div class="card" style={{ display: card.display ? 'block' : 'none' }}>
+            <div className="card" style={{ display: card.display ? 'block' : 'none' }}>
               <h2>{card.patient_name}</h2>
               <p>{card.arrhythmias.join(',')}</p>
               <cite>{new Date(card.creation_date).toLocaleString()}</cite>
 
               <div>
-                <div class="btn" onClick={() => doneCard(card)}>DONE</div>
-                <div class="btn" onClick={() => rejectCard(card)}>REJECT</div>
+                <div className="btn" onClick={() => doneCard(card)}>DONE</div>
+                <div className="btn" onClick={() => rejectCard(card)}>REJECT</div>
               </div>
             </div>
           ))}
         </div>
-        <div class="col">
+        <div className="col">
           <p id="rejected-title" align="center">REJECTED</p>
           <hr />
           {rejectedCards.map((card, idx) => (
-            <div class="card" style={{ display: card.display ? 'block' : 'none' }}>
+            <div className="card" style={{ display: card.display ? 'block' : 'none' }}>
               <h2>{card.patient_name}</h2>
               <p>{card.arrhythmias.join(',')}</p>
               <cite>{new Date(card.created_date).toLocaleString()}</cite>
 
               <div>
-                <div class="btn" onClick={() => doneCard(card)}>DONE</div>
+                <div className="btn" onClick={() => doneCard(card)}>DONE</div>
               </div>
             </div>
           ))}
         </div>
-        <div class="col">
+        <div className="col">
           <p id="done-title" align="center">DONE</p>
           <hr />
           {doneCards.map((card, idx) => (
-            <div class="card" style={{ display: card.display ? 'block' : 'none' }}>
+            <div className="card" style={{ display: card.display ? 'block' : 'none' }}>
               <h2>{card.patient_name}</h2>
               <p>{card.arrhythmias.join(',')}</p>
               <cite>{new Date(card.created_date).toLocaleString()}</cite>
 
               <div>
-                <div class="btn" onClick={() => rejectCard(card)}>REJECT</div>
+                <div className="btn" onClick={() => rejectCard(card)}>REJECT</div>
               </div>
             </div>
           ))}

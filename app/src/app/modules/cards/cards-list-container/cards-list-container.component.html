@@ -1,0 +1,22 @@
+<div class="pt-5">
+    <div>
+        <ct-card-filter (selectSearchEvent)="onSelectSearchEvent($event)"
+            (inputSearchEvent)="onInputSearchEvent($event)"></ct-card-filter>
+    </div>
+
+    <div class="grid grid-cols-3 text-center pt-12">
+        <span class="text-yellow-900">{{ "Card.Container.Pending" | translate }}</span>
+        <span class="text-red-400">{{ "Card.Container.Rejected" | translate }}</span>
+        <span class="text-green-400">{{ "Card.Container.Done" | translate }}</span>
+
+        <ng-container *ngFor="let card of cardsList$ | async">
+            <div [ngClass]="{ 
+                    'col-start-1': card.status === CardStatus.Pending,
+                    'col-start-2': card.status === CardStatus.Rejected,
+                    'col-start-3': card.status === CardStatus.Done
+                }">
+                <ct-card-content [card]="card"></ct-card-content>
+            </div>
+        </ng-container>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+<div class="flex justify-end pr-5 gap-3">
+    <input type="text" placeholder="Search..." (keyup)="onInputEvent($event)" />
+    <select *ngIf="arrhythmias.length > 0" (change)="onSelectEvent($event)">
+        <option>--</option>
+        <option *ngFor="let arrhythmia of arrhythmias"> {{arrhythmia }}</option>
+    </select>
+</div>
