@@ -1,6 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Arrhythmias } from '@ct-core/enum/arrhythmias.enum';
 
+export interface CardFilterModel {
+  filterType: 'select' | 'input';
+  value: Arrhythmias;
+}
+
 @Component({
   selector: 'ct-card-filter',
   templateUrl: './card-filter.component.html',
@@ -16,17 +21,22 @@ export class CardFilterComponent implements OnInit {
     Arrhythmias.Pause
   ];
 
-  @Output() inputSearchEvent = new EventEmitter<string>();
-  @Output() selectSearchEvent = new EventEmitter<string>();
+  @Output() filterEvent = new EventEmitter<CardFilterModel>();
 
   ngOnInit() { }
 
   onInputEvent(event: any) {
-    this.inputSearchEvent.emit(event.target.value);
+    this.filterEvent.emit({
+      filterType: 'input',
+      value: event.target.value
+    });
   }
 
   onSelectEvent(event: any) {
-    this.selectSearchEvent.emit(event.target.value);
+    this.filterEvent.emit({
+      filterType: 'select',
+      value: event.target.value
+    });
   }
 
 }

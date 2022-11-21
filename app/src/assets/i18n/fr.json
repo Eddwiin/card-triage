@@ -2,11 +2,9 @@
     "Header": {
         "Title": "Cardiologs"
     },
-    "Card": {
-        "Container": {
-            "Pending": "PENDING",
-            "Rejected": "REJECTED",
-            "Done": "DONE"
-        }
+    "Status": {
+        "Pending": "PENDING",
+        "Rejected": "REJECTED",
+        "Done": "DONE"
     }
 }
