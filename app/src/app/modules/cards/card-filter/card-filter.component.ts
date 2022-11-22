@@ -1,17 +1,16 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Arrhythmias } from '@ct-core/enum/arrhythmias.enum';
 
 export interface CardFilterModel {
   filterType: 'select' | 'input';
-  value: Arrhythmias;
+  value: Arrhythmias | string;
 }
 
 @Component({
   selector: 'ct-card-filter',
   templateUrl: './card-filter.component.html',
-  styleUrls: ['./card-filter.component.scss']
 })
-export class CardFilterComponent implements OnInit {
+export class CardFilterComponent {
   arrhythmiasEnum = Arrhythmias
   arrhythmias = [
     Arrhythmias.AFib,
@@ -23,18 +22,9 @@ export class CardFilterComponent implements OnInit {
 
   @Output() filterEvent = new EventEmitter<CardFilterModel>();
 
-  ngOnInit() { }
-
-  onInputEvent(event: any) {
+  onFilterEvent(event: any, filterType: 'select' | 'input') {
     this.filterEvent.emit({
-      filterType: 'input',
-      value: event.target.value
-    });
-  }
-
-  onSelectEvent(event: any) {
-    this.filterEvent.emit({
-      filterType: 'select',
+      filterType: filterType,
       value: event.target.value
     });
   }

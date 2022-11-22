@@ -17,17 +17,10 @@ export class CardContentComponent {
 
   @Output() statusChangedEvent = new EventEmitter<StatusChangedCardContent>();
 
-  onRejected() {
+  onStatusChanged(typeOfStatus: CardStatus.Done | CardStatus.Rejected) {
     this.statusChangedEvent.emit({
       id: this.card.id,
-      typeOfStatus: CardStatus.Rejected
-    })
-  }
-
-  onDone() {
-    this.statusChangedEvent.emit({
-      id: this.card.id,
-      typeOfStatus: CardStatus.Done
+      typeOfStatus
     })
   }
 }

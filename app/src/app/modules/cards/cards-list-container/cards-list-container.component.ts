@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Arrhythmias } from '@ct-core/enum/arrhythmias.enum';
+import { CardStatus } from '@ct-core/enum/card-status.enum';
 import { CardApiResponse } from '@ct-core/models/card-api.model';
 import { CardService } from '@ct-core/services/card/card.service';
-import { map, Observable, of, Subscription, tap } from 'rxjs';
-import { CardStatus } from '@ct-core/enum/card-status.enum';
-import { CardFilterModel } from '../card-filter/card-filter.component';
+import { map, Subscription } from 'rxjs';
 import { StatusChangedCardContent } from '../card-content/card-content.component';
-import { Arrhythmias } from '@ct-core/enum/arrhythmias.enum';
+import { CardFilterModel } from '../card-filter/card-filter.component';
 
 @Component({
   selector: 'ct-cards-list-cotainer',
@@ -22,15 +22,8 @@ export class CardsListContainerComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.cardService.getCards().pipe(
-        map(cards => {
-          this.initialCards = [...cards];
-          this.copyOfCards = [...this.initialCards];
-        })
-      ).subscribe()
+      this.getCards().subscribe()
     );
-
-
   }
 
   onFilterEvent(search: CardFilterModel) {
@@ -42,10 +35,10 @@ export class CardsListContainerComponent implements OnInit, OnDestroy {
 
     this.initialCards.forEach((currentCard) => {
       if (search.filterType === 'select') {
-        let cardWithArrhythmia = this.getSearchForArrhythmia(currentCard, search.value);
+        const cardWithArrhythmia = this.getCardByArrhythmia(currentCard, search.value as Arrhythmias);
         cardsWithMatchingFilter = (cardWithArrhythmia) ? [...cardsWithMatchingFilter, cardWithArrhythmia] : cardsWithMatchingFilter;
       } else {
-        let cardWithName = this.getSearchForInputName(currentCard, search.value);
+        const cardWithName = this.getCardByPatientName(currentCard, search.value);
         cardsWithMatchingFilter = (cardWithName) ? [...cardsWithMatchingFilter, cardWithName] : cardsWithMatchingFilter;
       }
     })
@@ -62,7 +55,6 @@ export class CardsListContainerComponent implements OnInit, OnDestroy {
       this.copyOfCards = this.copyOfCards.filter(currentCard => currentCard.id !== cardChanged.id);
       this.copyOfCards = [...this.copyOfCards, cardWithStatusChanged];
     }
-
   }
 
   ngOnDestroy(): void {
@@ -71,18 +63,27 @@ export class CardsListContainerComponent implements OnInit, OnDestroy {
 
   private isUnknownSelectedFilter(search: CardFilterModel) {
     if (search.filterType === 'select') {
-      const isUnknownFilter = !Object.values(Arrhythmias).includes(search.value);
+      const isUnknownFilter = !Object.values(Arrhythmias).includes(search.value as Arrhythmias);
       return isUnknownFilter;
     }
     return false;
   }
 
-  private getSearchForArrhythmia(card: CardApiResponse, searchArrhythmia: Arrhythmias) {
+  private getCards() {
+    return this.cardService.getCards().pipe(
+      map(cards => {
+        this.initialCards = [...cards];
+        this.copyOfCards = [...this.initialCards];
+      })
+    )
+  }
+
+  private getCardByArrhythmia(card: CardApiResponse, searchArrhythmia: Arrhythmias) {
     const isFoundArrhythmia = card.arrhythmias.some(currentArrhythmia => currentArrhythmia === searchArrhythmia);
     return (isFoundArrhythmia) ? card : null;
   }
 
-  private getSearchForInputName(card: CardApiResponse, searchName: string) {
+  private getCardByPatientName(card: CardApiResponse, searchName: string) {
     const isFoundName = card.patient_name.toLowerCase().includes(searchName.toLowerCase());
     return (isFoundName) ? card : null;
   }
